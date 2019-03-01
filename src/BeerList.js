@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid'
+import BeerItem from './BeerItem';
 
 class BeerList extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      beers: [],
+      beerList: [],
       isLoading: true
     }
   }
@@ -14,14 +15,14 @@ class BeerList extends Component {
   componentDidMount() {
     this.setState({isLoading: true});
 
-    fetch('http://localhost:8080/good-beers')
+    fetch('http://localhost:8080/beers')
       .then(responce => responce.json())
-      .then(data => this.setState({beers: data, isLoading: false}))
+      .then(data => this.setState({beerList: data, isLoading: false}))
       .catch(e => console.log(e));
-  }
+  };
 
   render() {
-    const {beers, isLoading} = this.state;
+    const {isLoading} = this.state;
     
     if(isLoading) {
       return <p>Loading...</p>;
@@ -31,15 +32,13 @@ class BeerList extends Component {
       <div>  
         <h2>Beer list</h2>
         <Grid container>
-        {beers.map(beer => 
-          <Grid item xs={12 / beers.length} key={beer.id}>
-            {beer.name}
-          </Grid>
-        )}
+          {this.state.beerList.map(beer => 
+              <BeerItem key={beer.id} name={beer.name}/>
+          )}
         </Grid>
       </div>
     );
   }
 }
 
-export default BeerList;
+export default (BeerList);
